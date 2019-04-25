@@ -1,0 +1,496 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.reserve.dao.PredictPersonMapper">
+  <resultMap id="BaseResultMap" type="com.reserve.bean.PredictPerson">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="Mon_morning" jdbcType="VARCHAR" property="monMorning" />
+    <result column="Mon_afternoon" jdbcType="VARCHAR" property="monAfternoon" />
+    <result column="Mon_evening" jdbcType="VARCHAR" property="monEvening" />
+    <result column="Tue_morning" jdbcType="VARCHAR" property="tueMorning" />
+    <result column="Tue_afternoon" jdbcType="VARCHAR" property="tueAfternoon" />
+    <result column="Tue_evening" jdbcType="VARCHAR" property="tueEvening" />
+    <result column="Wed_morning" jdbcType="VARCHAR" property="wedMorning" />
+    <result column="Wed_afternoon" jdbcType="VARCHAR" property="wedAfternoon" />
+    <result column="Wed_evening" jdbcType="VARCHAR" property="wedEvening" />
+    <result column="Thu_morning" jdbcType="VARCHAR" property="thuMorning" />
+    <result column="Thu_afternoon" jdbcType="VARCHAR" property="thuAfternoon" />
+    <result column="Thu_evening" jdbcType="VARCHAR" property="thuEvening" />
+    <result column="Fri_morning" jdbcType="VARCHAR" property="friMorning" />
+    <result column="Fri_afternoon" jdbcType="VARCHAR" property="friAfternoon" />
+    <result column="Fri_evening" jdbcType="VARCHAR" property="friEvening" />
+    <result column="Sat_morning" jdbcType="VARCHAR" property="satMorning" />
+    <result column="Sat_afternoon" jdbcType="VARCHAR" property="satAfternoon" />
+    <result column="Sat_evening" jdbcType="VARCHAR" property="satEvening" />
+    <result column="Sun_morning" jdbcType="VARCHAR" property="sunMorning" />
+    <result column="Sun_afternoon" jdbcType="VARCHAR" property="sunAfternoon" />
+    <result column="Sun_evening" jdbcType="VARCHAR" property="sunEvening" />
+    <result column="del_flag" jdbcType="VARCHAR" property="delFlag" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, Mon_morning, Mon_afternoon, Mon_evening, Tue_morning, Tue_afternoon, Tue_evening, 
+    Wed_morning, Wed_afternoon, Wed_evening, Thu_morning, Thu_afternoon, Thu_evening, 
+    Fri_morning, Fri_afternoon, Fri_evening, Sat_morning, Sat_afternoon, Sat_evening, 
+    Sun_morning, Sun_afternoon, Sun_evening, del_flag
+  </sql>
+  <select id="selectByExample" parameterType="com.reserve.bean.PredictPersonExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from predict_person
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from predict_person
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from predict_person
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.reserve.bean.PredictPersonExample">
+    delete from predict_person
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.reserve.bean.PredictPerson">
+    insert into predict_person (id, Mon_morning, Mon_afternoon, 
+      Mon_evening, Tue_morning, Tue_afternoon, 
+      Tue_evening, Wed_morning, Wed_afternoon, 
+      Wed_evening, Thu_morning, Thu_afternoon, 
+      Thu_evening, Fri_morning, Fri_afternoon, 
+      Fri_evening, Sat_morning, Sat_afternoon, 
+      Sat_evening, Sun_morning, Sun_afternoon, 
+      Sun_evening, del_flag)
+    values (#{id,jdbcType=VARCHAR}, #{monMorning,jdbcType=VARCHAR}, #{monAfternoon,jdbcType=VARCHAR}, 
+      #{monEvening,jdbcType=VARCHAR}, #{tueMorning,jdbcType=VARCHAR}, #{tueAfternoon,jdbcType=VARCHAR}, 
+      #{tueEvening,jdbcType=VARCHAR}, #{wedMorning,jdbcType=VARCHAR}, #{wedAfternoon,jdbcType=VARCHAR}, 
+      #{wedEvening,jdbcType=VARCHAR}, #{thuMorning,jdbcType=VARCHAR}, #{thuAfternoon,jdbcType=VARCHAR}, 
+      #{thuEvening,jdbcType=VARCHAR}, #{friMorning,jdbcType=VARCHAR}, #{friAfternoon,jdbcType=VARCHAR}, 
+      #{friEvening,jdbcType=VARCHAR}, #{satMorning,jdbcType=VARCHAR}, #{satAfternoon,jdbcType=VARCHAR}, 
+      #{satEvening,jdbcType=VARCHAR}, #{sunMorning,jdbcType=VARCHAR}, #{sunAfternoon,jdbcType=VARCHAR}, 
+      #{sunEvening,jdbcType=VARCHAR}, #{delFlag,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.reserve.bean.PredictPerson">
+    insert into predict_person
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="monMorning != null">
+        Mon_morning,
+      </if>
+      <if test="monAfternoon != null">
+        Mon_afternoon,
+      </if>
+      <if test="monEvening != null">
+        Mon_evening,
+      </if>
+      <if test="tueMorning != null">
+        Tue_morning,
+      </if>
+      <if test="tueAfternoon != null">
+        Tue_afternoon,
+      </if>
+      <if test="tueEvening != null">
+        "Tue_evening",
+      </if>
+      <if test="wedMorning != null">
+        Wed_morning,
+      </if>
+      <if test="wedAfternoon != null">
+        Wed_afternoon,
+      </if>
+      <if test="wedEvening != null">
+        Wed_evening,
+      </if>
+      <if test="thuMorning != null">
+        Thu_morning,
+      </if>
+      <if test="thuAfternoon != null">
+        Thu_afternoon,
+      </if>
+      <if test="thuEvening != null">
+        Thu_evening,
+      </if>
+      <if test="friMorning != null">
+        Fri_morning,
+      </if>
+      <if test="friAfternoon != null">
+        Fri_afternoon,
+      </if>
+      <if test="friEvening != null">
+        Fri_evening,
+      </if>
+      <if test="satMorning != null">
+        Sat_morning,
+      </if>
+      <if test="satAfternoon != null">
+        Sat_afternoon,
+      </if>
+      <if test="satEvening != null">
+        Sat_evening,
+      </if>
+      <if test="sunMorning != null">
+        Sun_morning,
+      </if>
+      <if test="sunAfternoon != null">
+        Sun_afternoon,
+      </if>
+      <if test="sunEvening != null">
+        Sun_evening,
+      </if>
+      <if test="delFlag != null">
+        del_flag,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="monMorning != null">
+        #{monMorning,jdbcType=VARCHAR},
+      </if>
+      <if test="monAfternoon != null">
+        #{monAfternoon,jdbcType=VARCHAR},
+      </if>
+      <if test="monEvening != null">
+        #{monEvening,jdbcType=VARCHAR},
+      </if>
+      <if test="tueMorning != null">
+        #{tueMorning,jdbcType=VARCHAR},
+      </if>
+      <if test="tueAfternoon != null">
+        #{tueAfternoon,jdbcType=VARCHAR},
+      </if>
+      <if test="tueEvening != null">
+        #{tueEvening,jdbcType=VARCHAR},
+      </if>
+      <if test="wedMorning != null">
+        #{wedMorning,jdbcType=VARCHAR},
+      </if>
+      <if test="wedAfternoon != null">
+        #{wedAfternoon,jdbcType=VARCHAR},
+      </if>
+      <if test="wedEvening != null">
+        #{wedEvening,jdbcType=VARCHAR},
+      </if>
+      <if test="thuMorning != null">
+        #{thuMorning,jdbcType=VARCHAR},
+      </if>
+      <if test="thuAfternoon != null">
+        #{thuAfternoon,jdbcType=VARCHAR},
+      </if>
+      <if test="thuEvening != null">
+        #{thuEvening,jdbcType=VARCHAR},
+      </if>
+      <if test="friMorning != null">
+        #{friMorning,jdbcType=VARCHAR},
+      </if>
+      <if test="friAfternoon != null">
+        #{friAfternoon,jdbcType=VARCHAR},
+      </if>
+      <if test="friEvening != null">
+        #{friEvening,jdbcType=VARCHAR},
+      </if>
+      <if test="satMorning != null">
+        #{satMorning,jdbcType=VARCHAR},
+      </if>
+      <if test="satAfternoon != null">
+        #{satAfternoon,jdbcType=VARCHAR},
+      </if>
+      <if test="satEvening != null">
+        #{satEvening,jdbcType=VARCHAR},
+      </if>
+      <if test="sunMorning != null">
+        #{sunMorning,jdbcType=VARCHAR},
+      </if>
+      <if test="sunAfternoon != null">
+        #{sunAfternoon,jdbcType=VARCHAR},
+      </if>
+      <if test="sunEvening != null">
+        #{sunEvening,jdbcType=VARCHAR},
+      </if>
+      <if test="delFlag != null">
+        #{delFlag,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.reserve.bean.PredictPersonExample" resultType="java.lang.Long">
+    select count(*) from predict_person
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update predict_person
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=VARCHAR},
+      </if>
+      <if test="record.monMorning != null">
+        Mon_morning = #{record.monMorning,jdbcType=VARCHAR},
+      </if>
+      <if test="record.monAfternoon != null">
+        Mon_afternoon = #{record.monAfternoon,jdbcType=VARCHAR},
+      </if>
+      <if test="record.monEvening != null">
+        Mon_evening = #{record.monEvening,jdbcType=VARCHAR},
+      </if>
+      <if test="record.tueMorning != null">
+        Tue_morning = #{record.tueMorning,jdbcType=VARCHAR},
+      </if>
+      <if test="record.tueAfternoon != null">
+        Tue_afternoon = #{record.tueAfternoon,jdbcType=VARCHAR},
+      </if>
+      <if test="record.tueEvening != null">
+        Tue_evening = #{record.tueEvening,jdbcType=VARCHAR},
+      </if>
+      <if test="record.wedMorning != null">
+        Wed_morning = #{record.wedMorning,jdbcType=VARCHAR},
+      </if>
+      <if test="record.wedAfternoon != null">
+        Wed_afternoon = #{record.wedAfternoon,jdbcType=VARCHAR},
+      </if>
+      <if test="record.wedEvening != null">
+        Wed_evening = #{record.wedEvening,jdbcType=VARCHAR},
+      </if>
+      <if test="record.thuMorning != null">
+        Thu_morning = #{record.thuMorning,jdbcType=VARCHAR},
+      </if>
+      <if test="record.thuAfternoon != null">
+        Thu_afternoon = #{record.thuAfternoon,jdbcType=VARCHAR},
+      </if>
+      <if test="record.thuEvening != null">
+        Thu_evening = #{record.thuEvening,jdbcType=VARCHAR},
+      </if>
+      <if test="record.friMorning != null">
+        Fri_morning = #{record.friMorning,jdbcType=VARCHAR},
+      </if>
+      <if test="record.friAfternoon != null">
+        Fri_afternoon = #{record.friAfternoon,jdbcType=VARCHAR},
+      </if>
+      <if test="record.friEvening != null">
+        Fri_evening = #{record.friEvening,jdbcType=VARCHAR},
+      </if>
+      <if test="record.satMorning != null">
+        Sat_morning = #{record.satMorning,jdbcType=VARCHAR},
+      </if>
+      <if test="record.satAfternoon != null">
+        Sat_afternoon = #{record.satAfternoon,jdbcType=VARCHAR},
+      </if>
+      <if test="record.satEvening != null">
+        Sat_evening = #{record.satEvening,jdbcType=VARCHAR},
+      </if>
+      <if test="record.sunMorning != null">
+        Sun_morning = #{record.sunMorning,jdbcType=VARCHAR},
+      </if>
+      <if test="record.sunAfternoon != null">
+        Sun_afternoon = #{record.sunAfternoon,jdbcType=VARCHAR},
+      </if>
+      <if test="record.sunEvening != null">
+        Sun_evening = #{record.sunEvening,jdbcType=VARCHAR},
+      </if>
+      <if test="record.delFlag != null">
+        del_flag = #{record.delFlag,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update predict_person
+    set id = #{record.id,jdbcType=VARCHAR},
+      Mon_morning = #{record.monMorning,jdbcType=VARCHAR},
+      Mon_afternoon = #{record.monAfternoon,jdbcType=VARCHAR},
+      Mon_evening = #{record.monEvening,jdbcType=VARCHAR},
+      Tue_morning = #{record.tueMorning,jdbcType=VARCHAR},
+      Tue_afternoon = #{record.tueAfternoon,jdbcType=VARCHAR},
+      Tue_evening = #{record.tueEvening,jdbcType=VARCHAR},
+      Wed_morning = #{record.wedMorning,jdbcType=VARCHAR},
+      Wed_afternoon = #{record.wedAfternoon,jdbcType=VARCHAR},
+      Wed_evening = #{record.wedEvening,jdbcType=VARCHAR},
+      Thu_morning = #{record.thuMorning,jdbcType=VARCHAR},
+      Thu_afternoon = #{record.thuAfternoon,jdbcType=VARCHAR},
+      Thu_evening = #{record.thuEvening,jdbcType=VARCHAR},
+      Fri_morning = #{record.friMorning,jdbcType=VARCHAR},
+      Fri_afternoon = #{record.friAfternoon,jdbcType=VARCHAR},
+      Fri_evening = #{record.friEvening,jdbcType=VARCHAR},
+      Sat_morning = #{record.satMorning,jdbcType=VARCHAR},
+      Sat_afternoon = #{record.satAfternoon,jdbcType=VARCHAR},
+      Sat_evening = #{record.satEvening,jdbcType=VARCHAR},
+      Sun_morning = #{record.sunMorning,jdbcType=VARCHAR},
+      Sun_afternoon = #{record.sunAfternoon,jdbcType=VARCHAR},
+      Sun_evening = #{record.sunEvening,jdbcType=VARCHAR},
+      del_flag = #{record.delFlag,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.reserve.bean.PredictPerson">
+    update predict_person
+    <set>
+      <if test="monMorning != null">
+        Mon_morning = #{monMorning,jdbcType=VARCHAR},
+      </if>
+      <if test="monAfternoon != null">
+        Mon_afternoon = #{monAfternoon,jdbcType=VARCHAR},
+      </if>
+      <if test="monEvening != null">
+        Mon_evening = #{monEvening,jdbcType=VARCHAR},
+      </if>
+      <if test="tueMorning != null">
+        Tue_morning = #{tueMorning,jdbcType=VARCHAR},
+      </if>
+      <if test="tueAfternoon != null">
+        Tue_afternoon = #{tueAfternoon,jdbcType=VARCHAR},
+      </if>
+      <if test="tueEvening != null">
+        Tue_evening = #{tueEvening,jdbcType=VARCHAR},
+      </if>
+      <if test="wedMorning != null">
+        Wed_morning = #{wedMorning,jdbcType=VARCHAR},
+      </if>
+      <if test="wedAfternoon != null">
+        Wed_afternoon = #{wedAfternoon,jdbcType=VARCHAR},
+      </if>
+      <if test="wedEvening != null">
+        Wed_evening = #{wedEvening,jdbcType=VARCHAR},
+      </if>
+      <if test="thuMorning != null">
+        Thu_morning = #{thuMorning,jdbcType=VARCHAR},
+      </if>
+      <if test="thuAfternoon != null">
+        Thu_afternoon = #{thuAfternoon,jdbcType=VARCHAR},
+      </if>
+      <if test="thuEvening != null">
+        Thu_evening = #{thuEvening,jdbcType=VARCHAR},
+      </if>
+      <if test="friMorning != null">
+        Fri_morning = #{friMorning,jdbcType=VARCHAR},
+      </if>
+      <if test="friAfternoon != null">
+        Fri_afternoon = #{friAfternoon,jdbcType=VARCHAR},
+      </if>
+      <if test="friEvening != null">
+        Fri_evening = #{friEvening,jdbcType=VARCHAR},
+      </if>
+      <if test="satMorning != null">
+        Sat_morning = #{satMorning,jdbcType=VARCHAR},
+      </if>
+      <if test="satAfternoon != null">
+        Sat_afternoon = #{satAfternoon,jdbcType=VARCHAR},
+      </if>
+      <if test="satEvening != null">
+        Sat_evening = #{satEvening,jdbcType=VARCHAR},
+      </if>
+      <if test="sunMorning != null">
+        Sun_morning = #{sunMorning,jdbcType=VARCHAR},
+      </if>
+      <if test="sunAfternoon != null">
+        Sun_afternoon = #{sunAfternoon,jdbcType=VARCHAR},
+      </if>
+      <if test="sunEvening != null">
+        Sun_evening = #{sunEvening,jdbcType=VARCHAR},
+      </if>
+      <if test="delFlag != null">
+        del_flag = #{delFlag,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.reserve.bean.PredictPerson">
+    update predict_person
+    set Mon_morning = #{monMorning,jdbcType=VARCHAR},
+      Mon_afternoon = #{monAfternoon,jdbcType=VARCHAR},
+      Mon_evening = #{monEvening,jdbcType=VARCHAR},
+      Tue_morning = #{tueMorning,jdbcType=VARCHAR},
+      Tue_afternoon = #{tueAfternoon,jdbcType=VARCHAR},
+      Tue_evening = #{tueEvening,jdbcType=VARCHAR},
+      Wed_morning = #{wedMorning,jdbcType=VARCHAR},
+      Wed_afternoon = #{wedAfternoon,jdbcType=VARCHAR},
+      Wed_evening = #{wedEvening,jdbcType=VARCHAR},
+      Thu_morning = #{thuMorning,jdbcType=VARCHAR},
+      Thu_afternoon = #{thuAfternoon,jdbcType=VARCHAR},
+      Thu_evening = #{thuEvening,jdbcType=VARCHAR},
+      Fri_morning = #{friMorning,jdbcType=VARCHAR},
+      Fri_afternoon = #{friAfternoon,jdbcType=VARCHAR},
+      Fri_evening = #{friEvening,jdbcType=VARCHAR},
+      Sat_morning = #{satMorning,jdbcType=VARCHAR},
+      Sat_afternoon = #{satAfternoon,jdbcType=VARCHAR},
+      Sat_evening = #{satEvening,jdbcType=VARCHAR},
+      Sun_morning = #{sunMorning,jdbcType=VARCHAR},
+      Sun_afternoon = #{sunAfternoon,jdbcType=VARCHAR},
+      Sun_evening = #{sunEvening,jdbcType=VARCHAR},
+      del_flag = #{delFlag,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>

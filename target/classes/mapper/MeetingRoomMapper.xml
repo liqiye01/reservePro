@@ -1,0 +1,340 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.reserve.dao.MeetingRoomMapper">
+  <resultMap id="BaseResultMap" type="com.reserve.bean.MeetingRoom">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="area" jdbcType="VARCHAR" property="area" />
+    <result column="building_num" jdbcType="INTEGER" property="buildingNum" />
+    <result column="floor" jdbcType="INTEGER" property="floor" />
+    <result column="room_num" jdbcType="INTEGER" property="roomNum" />
+    <result column="max_population" jdbcType="INTEGER" property="maxPopulation" />
+    <result column="time_arrange_id" jdbcType="VARCHAR" property="timeArrangeId" />
+    <result column="predict_person_id" jdbcType="VARCHAR" property="predictPersonId" />
+    <result column="del_flag" jdbcType="VARCHAR" property="delFlag" />
+  </resultMap>
+  
+  <resultMap id="DetailBaseResultMap" type="com.reserve.bean.MeetingRoom">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="area" jdbcType="VARCHAR" property="area" />
+    <result column="building_num" jdbcType="INTEGER" property="buildingNum" />
+    <result column="floor" jdbcType="INTEGER" property="floor" />
+    <result column="room_num" jdbcType="INTEGER" property="roomNum" />
+    <result column="max_population" jdbcType="INTEGER" property="maxPopulation" />
+    <result column="predict_person_id" jdbcType="VARCHAR" property="predictPersonId" />
+    <result column="del_flag" jdbcType="VARCHAR" property="delFlag" />
+    <association  property="timeArrange" column="time_arrange_id" javaType="com.reserve.bean.TimeArrange">
+    	<id property="id" column="id" jdbcType="VARCHAR"/>
+    	<result property="monMorning" column="Mon_morning" jdbcType="VARCHAR"/>
+    	<result property="monAfternoon" column="Mon_afternoon" jdbcType="VARCHAR"/>
+    	<result property="monEvening" column="Mon_evening" jdbcType="VARCHAR"/>
+    	<result property="tueMorning" column="Tue_morning" jdbcType="VARCHAR"/>
+    	<result property="tueAfternoon" column="Tue_afternoon" jdbcType="VARCHAR"/>
+    	<result property="tueEvening" column="Tue_evening" jdbcType="VARCHAR"/>
+    	<result property="wedMorning" column="Wed_morning" jdbcType="VARCHAR"/>
+    	<result property="wedAfternoon" column="Wed_afternoon" jdbcType="VARCHAR"/>
+    	<result property="wedEvening" column="Wed_evening" jdbcType="VARCHAR"/>
+    	<result property="thuMorning" column="Thu_morning" jdbcType="VARCHAR"/>
+    	<result property="thuAfternoon" column="Thu_afternoon" jdbcType="VARCHAR"/>
+    	<result property="thuEvening" column="Thu_evening" jdbcType="VARCHAR"/>
+    	<result property="friMorning" column="Fri_morning" jdbcType="VARCHAR"/>
+    	<result property="friAfternoon" column="Fri_afternoon" jdbcType="VARCHAR"/>
+    	<result property="friEvening" column="Fri_evening" jdbcType="VARCHAR"/>
+    	<result property="satMorning" column="Sat_morning" jdbcType="VARCHAR"/>
+    	<result property="satAfternoon" column="Sat_afternoon" jdbcType="VARCHAR"/>
+    	<result property="satEvening" column="Sat_evening" jdbcType="VARCHAR"/>
+    	<result property="sunMorning" column="Sun_morning" jdbcType="VARCHAR"/>
+    	<result property="sunAfternoon" column="Sun_afternoon" jdbcType="VARCHAR"/>
+    	<result property="sunEvening" column="Sun_evening" jdbcType="VARCHAR"/>
+    </association>
+  </resultMap>
+  
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  
+  <sql id="meetingJoins">
+		LEFT JOIN time_arrange b  ON b.id = a.time_arrange_id
+  </sql>
+  
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, area, building_num, floor, room_num, max_population, time_arrange_id, predict_person_id, 
+    del_flag
+  </sql>
+  <select id="selectByExample" parameterType="com.reserve.bean.MeetingRoomExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from meeting_room
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+    order by area,building_num,room_num
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from meeting_room
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from meeting_room
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.reserve.bean.MeetingRoomExample">
+    delete from meeting_room
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.reserve.bean.MeetingRoom">
+    insert into meeting_room (id, area, building_num, 
+      floor, room_num, max_population, 
+      time_arrange_id, predict_person_id, del_flag
+      )
+    values (#{id,jdbcType=VARCHAR}, #{area,jdbcType=VARCHAR}, #{buildingNum,jdbcType=INTEGER}, 
+      #{floor,jdbcType=INTEGER}, #{roomNum,jdbcType=INTEGER}, #{maxPopulation,jdbcType=INTEGER}, 
+      #{timeArrangeId,jdbcType=VARCHAR}, #{predictPersonId,jdbcType=VARCHAR}, #{delFlag,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.reserve.bean.MeetingRoom">
+    insert into meeting_room
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="area != null">
+        area,
+      </if>
+      <if test="buildingNum != null">
+        building_num,
+      </if>
+      <if test="floor != null">
+        floor,
+      </if>
+      <if test="roomNum != null">
+        room_num,
+      </if>
+      <if test="maxPopulation != null">
+        max_population,
+      </if>
+      <if test="timeArrangeId != null">
+        time_arrange_id,
+      </if>
+      <if test="predictPersonId != null">
+        predict_person_id,
+      </if>
+      <if test="delFlag != null">
+        del_flag,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="area != null">
+        #{area,jdbcType=VARCHAR},
+      </if>
+      <if test="buildingNum != null">
+        #{buildingNum,jdbcType=INTEGER},
+      </if>
+      <if test="floor != null">
+        #{floor,jdbcType=INTEGER},
+      </if>
+      <if test="roomNum != null">
+        #{roomNum,jdbcType=INTEGER},
+      </if>
+      <if test="maxPopulation != null">
+        #{maxPopulation,jdbcType=INTEGER},
+      </if>
+      <if test="timeArrangeId != null">
+        #{timeArrangeId,jdbcType=VARCHAR},
+      </if>
+      <if test="predictPersonId != null">
+        #{predictPersonId,jdbcType=VARCHAR},
+      </if>
+      <if test="delFlag != null">
+        #{delFlag,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.reserve.bean.MeetingRoomExample" resultType="java.lang.Long">
+    select count(*) from meeting_room
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update meeting_room
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=VARCHAR},
+      </if>
+      <if test="record.area != null">
+        area = #{record.area,jdbcType=VARCHAR},
+      </if>
+      <if test="record.buildingNum != null">
+        building_num = #{record.buildingNum,jdbcType=INTEGER},
+      </if>
+      <if test="record.floor != null">
+        floor = #{record.floor,jdbcType=INTEGER},
+      </if>
+      <if test="record.roomNum != null">
+        room_num = #{record.roomNum,jdbcType=INTEGER},
+      </if>
+      <if test="record.maxPopulation != null">
+        max_population = #{record.maxPopulation,jdbcType=INTEGER},
+      </if>
+      <if test="record.timeArrangeId != null">
+        time_arrange_id = #{record.timeArrangeId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.predictPersonId != null">
+        predict_person_id = #{record.predictPersonId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.delFlag != null">
+        del_flag = #{record.delFlag,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update meeting_room
+    set id = #{record.id,jdbcType=VARCHAR},
+      area = #{record.area,jdbcType=VARCHAR},
+      building_num = #{record.buildingNum,jdbcType=INTEGER},
+      floor = #{record.floor,jdbcType=INTEGER},
+      room_num = #{record.roomNum,jdbcType=INTEGER},
+      max_population = #{record.maxPopulation,jdbcType=INTEGER},
+      time_arrange_id = #{record.timeArrangeId,jdbcType=VARCHAR},
+      predict_person_id = #{record.predictPersonId,jdbcType=VARCHAR},
+      del_flag = #{record.delFlag,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.reserve.bean.MeetingRoom">
+    update meeting_room
+    <set>
+      <if test="area != null">
+        area = #{area,jdbcType=VARCHAR},
+      </if>
+      <if test="buildingNum != null">
+        building_num = #{buildingNum,jdbcType=INTEGER},
+      </if>
+      <if test="floor != null">
+        floor = #{floor,jdbcType=INTEGER},
+      </if>
+      <if test="roomNum != null">
+        room_num = #{roomNum,jdbcType=INTEGER},
+      </if>
+      <if test="maxPopulation != null">
+        max_population = #{maxPopulation,jdbcType=INTEGER},
+      </if>
+      <if test="timeArrangeId != null">
+        time_arrange_id = #{timeArrangeId,jdbcType=VARCHAR},
+      </if>
+      <if test="predictPersonId != null">
+        predict_person_id = #{predictPersonId,jdbcType=VARCHAR},
+      </if>
+      <if test="delFlag != null">
+        del_flag = #{delFlag,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.reserve.bean.MeetingRoom">
+    update meeting_room
+    set area = #{area,jdbcType=VARCHAR},
+      building_num = #{buildingNum,jdbcType=INTEGER},
+      floor = #{floor,jdbcType=INTEGER},
+      room_num = #{roomNum,jdbcType=INTEGER},
+      max_population = #{maxPopulation,jdbcType=INTEGER},
+      time_arrange_id = #{timeArrangeId,jdbcType=VARCHAR},
+      predict_person_id = #{predictPersonId,jdbcType=VARCHAR},
+      del_flag = #{delFlag,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  
+  <select id="findBuildingnum"  resultType="String">
+    select distinct meeting_room from laboratory_building
+    ORDER BY building_num
+  </select>
+  
+  <select id="findMeetingByBuildingNum" parameterType="java.lang.Integer" resultType="com.reserve.bean.MeetingRoom">
+    select 
+    <include refid="Base_Column_List" />
+     from meeting_room
+     where building_num=#{buildingNum}
+    ORDER BY room_num
+  </select>
+  
+  <select id="getDetailsById" parameterType="java.lang.String" resultMap="DetailBaseResultMap">
+    select *
+     from meeting_room a
+      <include refid="meetingJoins" />
+     where a.id = #{id} 
+  </select>
+  
+  
+</mapper>

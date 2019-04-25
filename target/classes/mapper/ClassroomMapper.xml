@@ -1,0 +1,419 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.reserve.dao.ClassroomMapper">
+  <resultMap id="BaseResultMap" type="com.reserve.bean.Classroom">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="area" jdbcType="VARCHAR" property="area" />
+    <result column="building_num" jdbcType="INTEGER" property="buildingNum" />
+    <result column="floor" jdbcType="INTEGER" property="floor" />
+    <result column="room_num" jdbcType="INTEGER" property="roomNum" />
+    <result column="max_population" jdbcType="INTEGER" property="maxPopulation" />
+    <result column="air_conditioner" jdbcType="VARCHAR" property="airConditioner" />
+    <result column="time_arrange_id" jdbcType="VARCHAR" property="timeArrangeId" />
+    <result column="predict_person_id" jdbcType="VARCHAR" property="predictPersonId" />
+    <result column="del_flag" jdbcType="VARCHAR" property="delFlag" />
+  </resultMap>
+  
+  <resultMap id="DetailBaseResultMap" type="com.reserve.bean.Classroom">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="area" jdbcType="VARCHAR" property="area" />
+    <result column="building_num" jdbcType="INTEGER" property="buildingNum" />
+    <result column="floor" jdbcType="INTEGER" property="floor" />
+    <result column="room_num" jdbcType="INTEGER" property="roomNum" />
+    <result column="max_population" jdbcType="INTEGER" property="maxPopulation" />
+    <result column="air_conditioner" jdbcType="VARCHAR" property="airConditioner" />
+    <!-- <result column="time_arrange_id" jdbcType="VARCHAR" property="timeArrangeId" /> -->
+    <result column="predict_person_id" jdbcType="VARCHAR" property="predictPersonId" />
+    <result column="del_flag" jdbcType="VARCHAR" property="delFlag" />
+    <association  property="timeArrange" column="time_arrange_id" javaType="com.reserve.bean.TimeArrange">
+    	<id property="id" column="id" jdbcType="VARCHAR"/>
+    	<result property="monMorning" column="Mon_morning" jdbcType="VARCHAR"/>
+    	<result property="monAfternoon" column="Mon_afternoon" jdbcType="VARCHAR"/>
+    	<result property="monEvening" column="Mon_evening" jdbcType="VARCHAR"/>
+    	<result property="tueMorning" column="Tue_morning" jdbcType="VARCHAR"/>
+    	<result property="tueAfternoon" column="Tue_afternoon" jdbcType="VARCHAR"/>
+    	<result property="tueEvening" column="Tue_evening" jdbcType="VARCHAR"/>
+    	<result property="wedMorning" column="Wed_morning" jdbcType="VARCHAR"/>
+    	<result property="wedAfternoon" column="Wed_afternoon" jdbcType="VARCHAR"/>
+    	<result property="wedEvening" column="Wed_evening" jdbcType="VARCHAR"/>
+    	<result property="thuMorning" column="Thu_morning" jdbcType="VARCHAR"/>
+    	<result property="thuAfternoon" column="Thu_afternoon" jdbcType="VARCHAR"/>
+    	<result property="thuEvening" column="Thu_evening" jdbcType="VARCHAR"/>
+    	<result property="friMorning" column="Fri_morning" jdbcType="VARCHAR"/>
+    	<result property="friAfternoon" column="Fri_afternoon" jdbcType="VARCHAR"/>
+    	<result property="friEvening" column="Fri_evening" jdbcType="VARCHAR"/>
+    	<result property="satMorning" column="Sat_morning" jdbcType="VARCHAR"/>
+    	<result property="satAfternoon" column="Sat_afternoon" jdbcType="VARCHAR"/>
+    	<result property="satEvening" column="Sat_evening" jdbcType="VARCHAR"/>
+    	<result property="sunMorning" column="Sun_morning" jdbcType="VARCHAR"/>
+    	<result property="sunAfternoon" column="Sun_afternoon" jdbcType="VARCHAR"/>
+    	<result property="sunEvening" column="Sun_evening" jdbcType="VARCHAR"/>
+    </association>
+  </resultMap>
+  
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  
+  <sql id="classroomJoins">
+		LEFT JOIN time_arrange b  ON b.id = a.time_arrange_id
+  </sql>
+  
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    classroom.id, area, building_num, floor, room_num, max_population, air_conditioner, time_arrange_id, 
+    predict_person_id, del_flag 
+  </sql>
+  
+  <sql id="detailsList">
+    classroom.id, 
+    area, 
+    building_num, 
+    floor, 
+    room_num, 
+    max_population, 
+    air_conditioner, 
+    time_arrange_id, 
+    predict_person_id, 
+    del_flag,
+    b.Mon_morning as timeArrange.monMorning ,
+    b.Mon_afternoon as timeArrange.monAfternoon ,
+    b.Mon_evening as timeArrange.monEvening ,
+    b.Tue_morning as timeArrange.tueMorning ,
+    b.Tue_afternoon as timeArrange.tueAfternoon ,
+    b.Tue_evening as timeArrange.tueEvening ,
+    b.Wed_morning as timeArrange.wedMorning ,
+    b.Wed_afternoon as timeArrange.wedAfternoon ,
+    b.Wed_evening as timeArrange.wedEvening ,
+    b.Thu_morning as timeArrange.thuMorning ,
+    b.Thu_afternoon as timeArrange.thuAfternoon ,
+    b.Thu_evening as timeArrange.thuEvening ,
+    b.Fri_morning as timeArrange.friMorning ,
+    b.Fri_afternoon as timeArrange.friAfternoon ,
+    b.Fri_evening as timeArrange.friEvening ,
+    b.Sat_morning as timeArrange.satMorning ,
+    b.Sat_afternoon as timeArrange.satAfternoon ,
+    b.Sat_evening as timeArrange.satEvening ,
+    b.Sun_morning as timeArrange.sunMorning ,
+    b.Sun_afternoon as timeArrange.sunAfternoon ,
+    b.Sun_evening as timeArrange.sunEvening 
+   <!--  c.Mon_morning as PredictPerson.monMorning ,
+    c.Mon_afternoon as PredictPerson.monAfternoon ,
+    c.Mon_evening as PredictPerson.monEvening ,
+    c.Tue_morning as PredictPerson.tueMorning ,
+    c.Tue_afternoon as PredictPerson.tueAfternoon ,
+    c.Tue_evening as PredictPerson.tueEvening ,
+    c.Wed_morning as PredictPerson.wedMorning ,
+    c.Wed_afternoon as PredictPerson.wedAfternoon ,
+    c.Wed_evening as PredictPerson.wedEvening ,
+    c.Thu_morning as PredictPerson.thuMorning ,
+    c.Thu_afternoon as PredictPerson.thuAfternoon ,
+    c.Thu_evening as PredictPerson.thuEvening ,
+    c.Fri_morning as PredictPerson.friMorning ,
+    c.Fri_afternoon as PredictPerson.friAfternoon ,
+    c.Fri_evening as PredictPerson.friEvening ,
+    c.Sat_morning as PredictPerson.satMorning ,
+    c.Sat_afternoon as PredictPerson.satAfternoon ,
+    c.Sat_evening as PredictPerson.satEvening ,
+    c.Sun_morning as PredictPerson.sunMorning ,
+    c.Sun_afternoon as PredictPerson.sunAfternoon ,
+    c.Sun_evening as PredictPerson.sunEvening  -->
+  </sql>
+  
+  <select id="selectByExample" parameterType="com.reserve.bean.ClassroomExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from classroom
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by building_num
+    </if>
+    order by area,building_num,room_num
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from classroom
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from classroom
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.reserve.bean.ClassroomExample">
+    delete from classroom
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.reserve.bean.Classroom">
+    insert into classroom (id, area, building_num, 
+      floor, room_num, max_population, 
+      air_conditioner, time_arrange_id, predict_person_id, 
+      del_flag)
+    values (#{id,jdbcType=VARCHAR}, #{area,jdbcType=VARCHAR}, #{buildingNum,jdbcType=INTEGER}, 
+      #{floor,jdbcType=INTEGER}, #{roomNum,jdbcType=INTEGER}, #{maxPopulation,jdbcType=INTEGER}, 
+      #{airConditioner,jdbcType=VARCHAR}, #{timeArrangeId,jdbcType=VARCHAR}, #{predictPersonId,jdbcType=VARCHAR}, 
+      #{delFlag,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.reserve.bean.Classroom">
+    insert into classroom
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="area != null">
+        area,
+      </if>
+      <if test="buildingNum != null">
+        building_num,
+      </if>
+      <if test="floor != null">
+        floor,
+      </if>
+      <if test="roomNum != null">
+        room_num,
+      </if>
+      <if test="maxPopulation != null">
+        max_population,
+      </if>
+      <if test="airConditioner != null">
+        air_conditioner,
+      </if>
+      <if test="timeArrangeId != null">
+        time_arrange_id,
+      </if>
+      <if test="predictPersonId != null">
+        predict_person_id,
+      </if>
+      <if test="delFlag != null">
+        del_flag,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="area != null">
+        #{area,jdbcType=VARCHAR},
+      </if>
+      <if test="buildingNum != null">
+        #{buildingNum,jdbcType=INTEGER},
+      </if>
+      <if test="floor != null">
+        #{floor,jdbcType=INTEGER},
+      </if>
+      <if test="roomNum != null">
+        #{roomNum,jdbcType=INTEGER},
+      </if>
+      <if test="maxPopulation != null">
+        #{maxPopulation,jdbcType=INTEGER},
+      </if>
+      <if test="airConditioner != null">
+        #{airConditioner,jdbcType=VARCHAR},
+      </if>
+      <if test="timeArrangeId != null">
+        #{timeArrangeId,jdbcType=VARCHAR},
+      </if>
+      <if test="predictPersonId != null">
+        #{predictPersonId,jdbcType=VARCHAR},
+      </if>
+      <if test="delFlag != null">
+        #{delFlag,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.reserve.bean.ClassroomExample" resultType="java.lang.Long">
+    select count(*) from classroom
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update classroom
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=VARCHAR},
+      </if>
+      <if test="record.area != null">
+        area = #{record.area,jdbcType=VARCHAR},
+      </if>
+      <if test="record.buildingNum != null">
+        building_num = #{record.buildingNum,jdbcType=INTEGER},
+      </if>
+      <if test="record.floor != null">
+        floor = #{record.floor,jdbcType=INTEGER},
+      </if>
+      <if test="record.roomNum != null">
+        room_num = #{record.roomNum,jdbcType=INTEGER},
+      </if>
+      <if test="record.maxPopulation != null">
+        max_population = #{record.maxPopulation,jdbcType=INTEGER},
+      </if>
+      <if test="record.airConditioner != null">
+        air_conditioner = #{record.airConditioner,jdbcType=VARCHAR},
+      </if>
+      <if test="record.timeArrangeId != null">
+        time_arrange_id = #{record.timeArrangeId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.predictPersonId != null">
+        predict_person_id = #{record.predictPersonId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.delFlag != null">
+        del_flag = #{record.delFlag,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update classroom
+    set id = #{record.id,jdbcType=VARCHAR},
+      area = #{record.area,jdbcType=VARCHAR},
+      building_num = #{record.buildingNum,jdbcType=INTEGER},
+      floor = #{record.floor,jdbcType=INTEGER},
+      room_num = #{record.roomNum,jdbcType=INTEGER},
+      max_population = #{record.maxPopulation,jdbcType=INTEGER},
+      air_conditioner = #{record.airConditioner,jdbcType=VARCHAR},
+      time_arrange_id = #{record.timeArrangeId,jdbcType=VARCHAR},
+      predict_person_id = #{record.predictPersonId,jdbcType=VARCHAR},
+      del_flag = #{record.delFlag,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.reserve.bean.Classroom">
+    update classroom
+    <set>
+      <if test="area != null">
+        area = #{area,jdbcType=VARCHAR},
+      </if>
+      <if test="buildingNum != null">
+        building_num = #{buildingNum,jdbcType=INTEGER},
+      </if>
+      <if test="floor != null">
+        floor = #{floor,jdbcType=INTEGER},
+      </if>
+      <if test="roomNum != null">
+        room_num = #{roomNum,jdbcType=INTEGER},
+      </if>
+      <if test="maxPopulation != null">
+        max_population = #{maxPopulation,jdbcType=INTEGER},
+      </if>
+      <if test="airConditioner != null">
+        air_conditioner = #{airConditioner,jdbcType=VARCHAR},
+      </if>
+      <if test="timeArrangeId != null">
+        time_arrange_id = #{timeArrangeId,jdbcType=VARCHAR},
+      </if>
+      <if test="predictPersonId != null">
+        predict_person_id = #{predictPersonId,jdbcType=VARCHAR},
+      </if>
+      <if test="delFlag != null">
+        del_flag = #{delFlag,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.reserve.bean.Classroom">
+    update classroom
+    set area = #{area,jdbcType=VARCHAR},
+      building_num = #{buildingNum,jdbcType=INTEGER},
+      floor = #{floor,jdbcType=INTEGER},
+      room_num = #{roomNum,jdbcType=INTEGER},
+      max_population = #{maxPopulation,jdbcType=INTEGER},
+      air_conditioner = #{airConditioner,jdbcType=VARCHAR},
+      time_arrange_id = #{timeArrangeId,jdbcType=VARCHAR},
+      predict_person_id = #{predictPersonId,jdbcType=VARCHAR},
+      del_flag = #{delFlag,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  
+  
+  <select id="findBuildingnumByArea" parameterType="java.lang.Integer" resultType="String">
+    select distinct building_num from classroom
+    where area=#{area}
+    ORDER BY building_num
+  </select>
+  
+  
+  
+  <select id="findClassroomByBuildingNum" parameterType="java.lang.Integer" resultType="Classroom">
+    select 
+    <include refid="Base_Column_List" />
+     from classroom
+     where building_num=#{buildingNum}
+    ORDER BY room_num
+  </select>
+  
+  
+  <select id="getDetailsById" parameterType="java.lang.String" resultMap="DetailBaseResultMap">
+    select *
+    <!-- <include refid="detailsList" /> -->
+     from classroom a
+      <include refid="classroomJoins" />
+     where a.id = #{classroomId} 
+  </select>
+  
+  
+</mapper>
